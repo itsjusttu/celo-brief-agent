@@ -1,0 +1,33 @@
+{
+  "name": "celo-brief-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Agent that pays for a daily crypto brief over x402 from a user's Altana smart agentic wallet on Celo, and delivers it to Telegram.",
+  "scripts": {
+    "seller": "tsx src/seller/server.ts",
+    "web": "tsx src/web/server.ts",
+    "agent": "tsx src/agent/runner.ts",
+    "agent:once": "tsx src/agent/runner.ts --once",
+    "register8004": "tsx src/scripts/register8004.ts",
+    "check:supported": "tsx src/scripts/checkSupported.ts",
+    "verify:tx": "tsx src/scripts/verifyTx.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@altananetwork/sdk": "^1.1.0",
+    "@celo/attribution-tags": "latest",
+    "@hono/node-server": "^1.13.0",
+    "@x402/core": "latest",
+    "@x402/evm": "latest",
+    "@x402/hono": "latest",
+    "dotenv": "^16.4.5",
+    "hono": "^4.6.0",
+    "viem": "^2.21.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}

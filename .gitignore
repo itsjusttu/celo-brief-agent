@@ -1,0 +1,11 @@
+node_modules
+dist
+data
+
+# secrets — never commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.claude/settings.local.json
