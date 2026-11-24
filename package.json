@@ -12,18 +12,19 @@
     "register8004": "tsx src/scripts/register8004.ts",
     "check:supported": "tsx src/scripts/checkSupported.ts",
     "verify:tx": "tsx src/scripts/verifyTx.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check:tokens": "tsx src/scripts/checkTokens.ts"
   },
   "dependencies": {
-    "@altananetwork/sdk": "^1.1.0",
-    "@celo/attribution-tags": "latest",
+    "@altananetwork/sdk": "^1.2.0",
+    "@celo/attribution-tags": "^0.5.0",
     "@hono/node-server": "^1.13.0",
-    "@x402/core": "latest",
-    "@x402/evm": "latest",
-    "@x402/hono": "latest",
+    "@x402/core": "2.32.0",
+    "@x402/evm": "2.32.0",
+    "@x402/hono": "2.32.0",
     "dotenv": "^16.4.5",
     "hono": "^4.6.0",
-    "viem": "^2.21.0"
+    "viem": "^2.58.4"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
