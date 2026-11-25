@@ -57,8 +57,17 @@ async function runFor(u: UserRecord): Promise<RunLog> {
   return { at: Date.now(), ok: true, txHash };
 }
 
+const utcDay = (ms: number) => new Date(ms).toISOString().slice(0, 10);
+
+/**
+ * One scheduled pass over all users. Skips anyone already paid for today, so a
+ * restart/redeploy inside the cron hour (Railway redeploys on every push) never
+ * charges a user twice. Persisted in users.json, not in memory.
+ */
 export async function tick() {
+  const today = utcDay(Date.now());
   for (const u of loadUsers()) {
+    if (u.runs.some((r) => r.ok && r.scheduled && utcDay(r.at) === today)) continue;
     let log: RunLog;
     try {
       log = await runFor(u);
@@ -71,7 +80,7 @@ export async function tick() {
       if (msg && u.pausedCode !== code) await sendTelegram(u.telegramChatId, msg).catch(() => {});
     }
     updateUser(u.id, (x) => {
-      x.runs.push(log);
+      x.runs.push({ ...log, scheduled: true });
       x.lastRunAt = log.at;
       x.pausedCode = log.ok ? undefined : log.code;
     });

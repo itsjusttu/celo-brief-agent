@@ -10,6 +10,7 @@ export type RunLog = {
   ok: boolean;
   txHash?: string;    // x402 settlement tx (from the PAYMENT-RESPONSE header)
   code?: string;      // AltanaError code or our own failure code
+  scheduled?: boolean; // daily run (vs. on-demand /brief from Telegram)
   note?: string;
 };
 
