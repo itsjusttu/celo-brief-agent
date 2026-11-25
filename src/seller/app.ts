@@ -16,7 +16,7 @@ const NETWORK = "eip155:42220" as const;
 
 export function createSellerApp() {
   if (!cfg.seller.payTo) throw new Error("SELLER_PAY_TO missing or not a valid address");
-  if (!cfg.seller.publicUrl) throw new Error("SELLER_PUBLIC_URL missing");
+  const publicUrl = cfg.publicUrl();
   if (!cfg.seller.apiKey) console.warn("X402_API_KEY is empty: the facilitator will refuse /settle");
 
   const facilitator = new HTTPFacilitatorClient({
@@ -41,7 +41,7 @@ export function createSellerApp() {
       name: "VN Brief Agent",
       description:
         "Pays for a daily crypto brief over x402 from the user's Altana smart agentic wallet (capped, revocable session key) and delivers it to Telegram in Vietnamese/English.",
-      services: [{ name: "web", endpoint: `${cfg.seller.publicUrl}/brief` }],
+      services: [{ name: "web", endpoint: `${publicUrl}/brief` }],
       x402Support: true,
       active: true,
       supportedTrust: ["reputation"],
@@ -64,8 +64,8 @@ export function createSellerApp() {
               price: { amount: priceAmount, asset: TOKENS.USDT.address, extra: { ...TOKENS.USDT.eip712 } },
             },
           ],
-          // Behind Railway's proxy the request looks like http://; state the public https URL.
-          resource: `${cfg.seller.publicUrl}/brief`,
+          // State the public https URL explicitly (don't trust the proxied request URL).
+          resource: `${publicUrl}/brief`,
           description: "Daily VI/EN crypto brief",
           mimeType: "application/json",
         },

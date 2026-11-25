@@ -1,5 +1,9 @@
-// Run once: npm run agent:once   |   Daily loop: npm run agent
-import { tick, startDailyLoop } from "./agent.js";
+// Local CLI: run today's daily pass to completion (same claims as the cron, so it can't double-charge).
+//   npm run agent:once
+import { runDailyBatch } from "./agent.js";
 
-if (process.argv.includes("--once")) await tick();
-else startDailyLoop();
+for (;;) {
+  const r = await runDailyBatch({ budgetMs: 10 * 60_000 });
+  console.log(`day=${r.day} processed=${r.processed} remaining=${r.remaining} ${r.ms}ms`);
+  if (r.remaining === 0) break;
+}

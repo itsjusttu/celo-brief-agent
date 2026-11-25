@@ -1,8 +1,8 @@
 import { cfg } from "./config.js";
 
 export async function sendTelegram(chatId: string, text: string) {
-  if (!cfg.telegramToken) throw new Error("TELEGRAM_BOT_TOKEN missing");
-  const r = await fetch(`https://api.telegram.org/bot${cfg.telegramToken}/sendMessage`, {
+  if (!cfg.telegram.token) throw new Error("TELEGRAM_BOT_TOKEN missing");
+  const r = await fetch(`https://api.telegram.org/bot${cfg.telegram.token}/sendMessage`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ chat_id: chatId, text, parse_mode: "HTML", disable_web_page_preview: true }),

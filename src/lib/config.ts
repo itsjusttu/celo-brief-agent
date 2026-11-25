@@ -25,6 +25,25 @@ export const TOKENS = {
 const CODE_RE = /^[a-z0-9_]{1,32}$/;
 
 export const cfg = {
+  /**
+   * Public https origin of this deployment (seller, onboarding, agent card, webhooks).
+   * SELLER_PUBLIC_URL wins; on Vercel it falls back to the production domain (*.vercel.app).
+   */
+  publicUrl(): string {
+    const explicit = opt("SELLER_PUBLIC_URL");
+    const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+    const url = explicit || (vercel ? `https://${vercel}` : "");
+    if (!url) throw new Error("SELLER_PUBLIC_URL missing");
+    return url.replace(/\/+$/, "");
+  },
+  /** Vercel sends it as "Authorization: Bearer <CRON_SECRET>" on cron calls. */
+  cronSecret: opt("CRON_SECRET"),
+  telegram: {
+    token: opt("TELEGRAM_BOT_TOKEN"),
+    /** setWebhook secret_token: Telegram echoes it in X-Telegram-Bot-Api-Secret-Token. */
+    webhookSecret: opt("TELEGRAM_WEBHOOK_SECRET"),
+    botUsername: opt("TELEGRAM_BOT_USERNAME").replace(/^@/, ""),
+  },
   rpc: opt("CELO_RPC", "https://forno.celo.org"),
   chainId: Number(opt("CHAIN_ID", "42220")),
   /**
@@ -42,7 +61,6 @@ export const cfg = {
   usdc: addr("USDC_ADDRESS", TOKENS.USDC.address),
   seller: {
     port: Number(opt("SELLER_PORT", "3402")),
-    publicUrl: opt("SELLER_PUBLIC_URL").replace(/\/+$/, ""),
     facilitator: opt("X402_FACILITATOR_URL", "https://api.x402.celo.org"),
     apiKey: opt("X402_API_KEY"),
     /** "" until a real address is set; only the seller requires it. */
@@ -50,8 +68,6 @@ export const cfg = {
     priceUsd: opt("BRIEF_PRICE_USD", "0.01"),
   },
   web: { port: Number(opt("WEB_PORT", "3000")), encKey: opt("SESSION_ENC_KEY") },
-  telegramToken: opt("TELEGRAM_BOT_TOKEN"),
-  cronHourUtc: Number(opt("AGENT_CRON_HOUR_UTC", "1")),
   identityRegistry: addr("IDENTITY_REGISTRY", "0x8004A169FB4a3325136EB29fA0ceB6D2e539a432"),
   /** The agent wallet registered on the Loops entry. Scripts refuse to send from any other key. */
   agentWallet: addr("AGENT_WALLET", "0x4De2308D558E01B0Aa1b5371A4d0b26D2e2988d1"),

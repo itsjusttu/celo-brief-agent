@@ -11,24 +11,26 @@ Built for Loops House × Celo "Agents Open for Business" — Altana Smart Agenti
  user (passkey = admin)                      Celo mainnet
    │ createPasskeyWallet + grantSession ──►  Altana KeyStore (cap, expiry)
    ▼
- web onboarding ──► data/users.json (serialized session + encrypted session key)
+ web onboarding ──► Upstash Redis (serialized session + encrypted session key)
                           │
- agent runner (daily) ────┘── fetchWithX402 ──► seller /brief (x402, USDT)
+ Vercel Cron (daily) ─────┘── fetchWithX402 ──► seller /brief (x402, USDT)
         │                                          │ settle via api.x402.celo.org
-        └── Telegram bot ◄──── brief ──────────────┘
+        └── Telegram (webhook) ◄── brief ──────────┘
  ERC-8004 identity: agent card at /.well-known/agent-card.json
  ERC-8021 tags: createClient({ appCode }) on every Altana tx
 ```
 
 ## Run
+Everything is one Hono app deployed as Vercel Functions (`src/index.ts`), with Upstash Redis
+for state and a Vercel Cron at 01:00 UTC (`vercel.json`).
 ```
-cp .env.example .env   # fill values
+cp .env.example .env   # fill values (never commit .env)
 npm install
+npm test               # integration test: fake Redis + fake seller, no mainnet
 npm run check:supported
-npm run seller         # x402 API
-npm run web            # onboarding
-npm run agent:once     # one pass for all users
-npm run register8004   # ERC-8004 identity
+npm run dev            # local server (needs Upstash vars)
+npm run register8004   # ERC-8004 identity (dry run; add -- --send)
+npm run telegram:webhook
 ```
 
 Status: scaffold. Build steps are in `PROMPTS_CLAUDE_CODE.md`.

@@ -5,32 +5,33 @@
   "type": "module",
   "description": "Agent that pays for a daily crypto brief over x402 from a user's Altana smart agentic wallet on Celo, and delivers it to Telegram.",
   "scripts": {
-    "start": "tsx src/main.ts",
-    "seller": "tsx src/seller/server.ts",
-    "web": "tsx src/web/server.ts",
-    "agent": "tsx src/agent/runner.ts",
-    "agent:once": "tsx src/agent/runner.ts --once",
+    "dev": "tsx src/dev.ts",
+    "agent:once": "tsx src/agent/runner.ts",
+    "telegram:webhook": "tsx src/scripts/setTelegramWebhook.ts",
     "register8004": "tsx src/scripts/register8004.ts",
     "check:supported": "tsx src/scripts/checkSupported.ts",
+    "check:tokens": "tsx src/scripts/checkTokens.ts",
     "verify:tx": "tsx src/scripts/verifyTx.ts",
     "typecheck": "tsc --noEmit",
-    "check:tokens": "tsx src/scripts/checkTokens.ts"
+    "test": "tsx test/integration.ts"
   },
   "dependencies": {
     "@altananetwork/sdk": "^1.2.0",
     "@celo/attribution-tags": "^0.5.0",
     "@hono/node-server": "^1.13.0",
+    "@upstash/redis": "^1.41.1",
+    "@vercel/functions": "^3.11.3",
     "@x402/core": "2.32.0",
     "@x402/evm": "2.32.0",
     "@x402/hono": "2.32.0",
     "dotenv": "^16.4.5",
     "hono": "^4.6.0",
-    "viem": "^2.58.4",
-    "tsx": "^4.19.0"
+    "viem": "^2.58.4"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
-    "typescript": "^5.6.0"
+    "typescript": "^5.6.0",
+    "tsx": "^4.19.0"
   },
   "engines": {
     "node": ">=20"
