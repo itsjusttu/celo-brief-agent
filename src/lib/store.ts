@@ -27,7 +27,8 @@ export type UserRecord = {
   runs: RunLog[];
 };
 
-const DIR = "data";
+// On Railway, DATA_DIR is the volume's mount path (e.g. /data). Locally: ./data
+const DIR = process.env.DATA_DIR || "data";
 const FILE = `${DIR}/users.json`;
 
 function key(): Buffer {

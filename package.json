@@ -5,6 +5,7 @@
   "type": "module",
   "description": "Agent that pays for a daily crypto brief over x402 from a user's Altana smart agentic wallet on Celo, and delivers it to Telegram.",
   "scripts": {
+    "start": "tsx src/main.ts",
     "seller": "tsx src/seller/server.ts",
     "web": "tsx src/web/server.ts",
     "agent": "tsx src/agent/runner.ts",
@@ -24,11 +25,14 @@
     "@x402/hono": "2.32.0",
     "dotenv": "^16.4.5",
     "hono": "^4.6.0",
-    "viem": "^2.58.4"
+    "viem": "^2.58.4",
+    "tsx": "^4.19.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
-    "tsx": "^4.19.0",
     "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
